@@ -1,34 +1,30 @@
 import ephem
 import datetime
-import pytz
 
-# Set your location
-your_location = ephem.Observer()
-your_location.lat = 'Insert Your Latitude Here'  # Insert your latitude
-your_location.lon = 'Insert Your Longitude Here'  # Insert your longitude
-your_location.elev = 0  # Altitude (in meters), 0 for sea level
+def get_moon_phase_and_times(latitude, longitude):
+    obs = ephem.Observer()
+    obs.lat = str(latitude)
+    obs.lon = str(longitude)
 
-# Set the current time
-now = datetime.datetime.utcnow()
-your_location.date = now
+    moon = ephem.Moon(obs)
 
-# Compute moon position
-moon = ephem.Moon()
-moon.compute(your_location)
+    # Moon phase
+    phase = ephem.phase_of_the_moon(datetime.datetime.utcnow())
+    phase_names = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
+    moon_phase = phase_names[int(phase) % len(phase_names)]
 
-# Get moon phase
-moon_phase = ephem.phase_of_the_moon(moon.date)
+    # Moonrise and moonset times
+    moon_rise = obs.previous_rising(moon)
+    moon_set = obs.next_setting(moon)
 
-# Get moonrise and moonset times
-moonrise_time = your_location.previous_rising(ephem.Moon())
-moonset_time = your_location.next_setting(ephem.Moon())
+    return moon_phase, moon_rise.datetime(), moon_set.datetime()
 
-# Convert to local time
-timezone = pytz.timezone('Insert Your Timezone Here')  # Insert your timezone
-moonrise_local = pytz.utc.localize(moonrise_time.datetime()).astimezone(timezone)
-moonset_local = pytz.utc.localize(moonset_time.datetime()).astimezone(timezone)
+latitude = input("Enter latitude (in decimal degrees): ")
+longitude = input("Enter longitude (in decimal degrees): ")
 
-# Format the output
+moon_phase, moon_rise, moon_set = get_moon_phase_and_times(latitude, longitude)
+
 print("Moon Phase:", moon_phase)
-print("Moonrise Time:", moonrise_local.strftime('%H:%M'))
-print("Moonset Time:", moonset_local.strftime('%H:%M'))
+print("Moonrise Time:", moon_rise)
+print("Moonset Time:", moon_set)
+``
