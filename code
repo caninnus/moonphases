@@ -19,12 +19,15 @@ def get_moon_phase_and_times(latitude, longitude):
 
     return moon_phase, moon_rise.datetime(), moon_set.datetime()
 
-latitude = input("Enter latitude (in decimal degrees): ")
-longitude = input("Enter longitude (in decimal degrees): ")
+def main():
+    latitude = input("Enter latitude (in decimal degrees): ")
+    longitude = input("Enter longitude (in decimal degrees): ")
 
-moon_phase, moon_rise, moon_set = get_moon_phase_and_times(latitude, longitude)
+    moon_phase, moon_rise, moon_set = get_moon_phase_and_times(latitude, longitude)
 
-print("Moon Phase:", moon_phase)
-print("Moonrise Time:", moon_rise)
-print("Moonset Time:", moon_set)
-``
+    print("Moon Phase:", moon_phase)
+    print("Moonrise Time:", moon_rise)
+    print("Moonset Time:", moon_set)
+
+if __name__ == "__main__":
+    main()
